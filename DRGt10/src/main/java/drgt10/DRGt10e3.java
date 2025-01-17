@@ -10,80 +10,95 @@ package drgt10;
 public class DRGt10e3 {
     public static void main(String[] args) {
 
-        Figura3D_v2 esfera = new Esfera_v1(1.0);
-        Figura3D_v2 prismaRec = new PrismaRectangular_v1(2, 4, 10);
-        System.out.printf("El volumen de la ESPERA es %.2f \n",esfera.volumen());
-        System.out.printf("El volumen del PRISMA RECTANGULAR es %.2f \n",prismaRec.volumen());
-        
-        if (esfera.volumen()>prismaRec.volumen()) {
-            System.out.printf("La ESFERA ocupa más (VOLUMEN %.2f) \n", esfera.volumen());
-        } else {
-            System.out.printf("El PRISMA RECTANGULAR ocupa más (VOLUMEN %.2f) \n", prismaRec.volumen());
-            
-        }
+        Figura3D_v2 esfera = new Esfera_v2(1.0f);
+        Figura3D_v2 prismaRec = new PrismaRectangular_v2(2, 4, 10);
+        Figura3D_v2 cilindro = new Cilindro(2.0f, 4.0f);
+        System.out.printf("El superficie de la ESPERA es %.2f \n", esfera.superficie());
+        System.out.printf("El superficie del PRISMA RECTANGULAR es %.2f \n", prismaRec.superficie());
+        System.out.printf("El superficie del PRISMA RECTANGULAR es %.2f \n", cilindro.superficie());
 
+        if (esfera.superficie() > prismaRec.superficie() && esfera.superficie() > cilindro.superficie()) {
+            System.out.printf("La esfera ocupa más superficie (SUPERFICIE %.2f) \n", esfera.superficie());
+        } else if (prismaRec.superficie() > esfera.superficie() && prismaRec.superficie() > cilindro.superficie()) {
+            System.out.printf("El PRISMA RECTANGULAR ocupa más superficie (SUPERFICIE %.2f) \n", prismaRec.superficie());
+        } else {
+            System.out.printf("El Cilindro ocupa más superficie (SUPERFICIE %.2f) \n", prismaRec.superficie());
+        }
     }
 }
-    abstract class Figura3D_v2 {
 
-        public abstract float volumen();
-        public abstract float superficie();
+abstract class Figura3D_v2 {
+
+    public abstract float volumen();
+
+    public abstract float superficie();
+}
+
+class Esfera_v2 extends Figura3D_v2 {
+    private float radio;
+
+    Esfera_v2(float radio) {
+        this.radio = radio;
     }
 
-    class Esfera_v1 extends Figura3D_v2 {
-        private double radio;
-
-        Esfera_v1(double radio) {
-            this.radio = radio;
-        }
-        @Override
-        public float volumen() {
-            // V = 4/3 π r³
-            return (float) ((4.0 / 3) * Math.PI * Math.pow(this.radio, 3));
-        }
-        @Override
-        public float superficie() {
-            // 4 π r 2
-            throw new UnsupportedOperationException("Unimplemented method 'superficie'");
-        }
-
+    @Override
+    public float volumen() {
+        // V = 4/3 π r³
+        return (float) ((4.0 / 3) * Math.PI * Math.pow(this.radio, 3));
     }
 
-    class PrismaRectangular_v1 extends Figura3D_v2 {
-        private float largo;
-        private float ancho;
-        private float altura;
-
-        PrismaRectangular_v1(float largo, float ancho, float altura) {
-            this.largo = largo;
-            this.ancho = ancho;
-            this.altura = altura;
-        }
-
-        @Override
-        public float volumen() {
-            // Multiplicamos el largo del prisma por su ancho y por su altura.
-            return (float) (this.largo * this.ancho * this.altura);
-        }
-
-        @Override
-        public float superficie() {
-            // 2(ab+bc+ac)
-            throw new UnsupportedOperationException("Unimplemented method 'superficie'");
-        }
-
+    @Override
+    public float superficie() {
+        // 4 π r 2
+        return (float) (4 * Math.PI * Math.pow(radio, 2));
     }
 
-    class Cilindro extends Figura3D_v2{
+}
 
-        @Override
-        public float volumen() {
-            // El volumen de un cilindro es π r² h
-            throw new UnsupportedOperationException("Unimplemented method 'volumen'");
-        }
+class PrismaRectangular_v2 extends Figura3D_v2 {
+    private float largo;
+    private float ancho;
+    private float altura;
 
-        @Override
-        public float superficie() {
-            // superficie es 2π r h + 2π r²
-            throw new UnsupportedOperationException("Unimplemented method 'superficie'");
-        }}
+    PrismaRectangular_v2(float largo, float ancho, float altura) {
+        this.largo = largo;
+        this.ancho = ancho;
+        this.altura = altura;
+    }
+
+    @Override
+    public float volumen() {
+        // Multiplicamos el largo del prisma por su ancho y por su altura.
+        return (float) (this.largo * this.ancho * this.altura);
+    }
+
+    @Override
+    public float superficie() {
+        // 2(ab+bc+ac)
+        return 2 * (largo * ancho + ancho * altura + largo * altura);
+    }
+
+}
+
+class Cilindro extends Figura3D_v2 {
+    private float radio; // Radio de la base del cilindro
+    private float altura; // Altura del cilindro
+
+    // Constructor
+    public Cilindro(float radio, float altura) {
+        this.radio = radio;
+        this.altura = altura;
+    }
+
+    @Override
+    public float volumen() {
+        // Fórmula: π * r^2 * h
+        return (float) (Math.PI * Math.pow(radio, 2) * altura);
+    }
+
+    @Override
+    public float superficie() {
+        // Fórmula: 2πrh + 2πr^2
+        return (float) (2 * Math.PI * radio * altura + 2 * Math.PI * Math.pow(radio, 2));
+    }
+}
